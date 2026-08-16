@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Scoresheet — Tenpile</title>
+<meta name="description" content="Keep score for a physical card game. Works with no signal.">
+<meta name="theme-color" content="#16211f">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/app.css">
+<style>
+  .entry { display: grid; grid-template-columns: 1fr 4.5rem 4.5rem 3.2rem; gap: .5rem; align-items: center; margin-bottom: .45rem; }
+  .entry input { padding: .55rem .4rem; text-align: center; font-family: var(--display); }
+  .entry .who { font-size: .95rem; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .delta { font: 400 1rem var(--display); text-align: right; }
+  .heads { display: grid; grid-template-columns: 1fr 4.5rem 4.5rem 3.2rem; gap: .5rem; margin-bottom: .35rem; }
+  .heads span { font-size: .62rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); text-align: center; }
+  .heads span:first-child { text-align: left; }
+  tr.lead td { color: var(--alert); }
+  .pill { display: inline-block; background: var(--rail); border-radius: 999px; padding: .1rem .6rem; font-size: .72rem; }
+</style>
+</head>
+<body>
+<nav class="crumbs">
+  <a href="/">Play</a>
+  <a href="/scoresheet.html" aria-current="page">Scoresheet</a>
+  <a href="/rules.html">How to play</a>
+</nav>
+
+<main class="wrap stack">
+  <div>
+    <h1>Scoresheet</h1>
+    <p class="muted small">For when you are playing with real cards. Nothing here needs a connection, and nothing leaves this phone.</p>
+  </div>
+
+  <section class="panel stack" id="setup" hidden>
+    <h3>Who is playing?</h3>
+    <div id="names" class="stack"></div>
+    <div class="row">
+      <button class="chip quiet" id="fewer" style="flex:1">Fewer</button>
+      <button class="chip quiet" id="more" style="flex:1">More</button>
+    </div>
+    <div>
+      <label for="target">Play to</label>
+      <input id="target" type="number" min="10" max="500" step="5" value="75" inputmode="numeric">
+    </div>
+    <button class="chip" id="begin">Start scoring</button>
+  </section>
+
+  <section class="panel stack" id="board" hidden>
+    <div class="spread">
+      <h3 id="roundLabel">Round 1</h3>
+      <span class="pill" id="targetLabel">to 75</span>
+    </div>
+    <div>
+      <div class="heads"><span>Player</span><span>In centre</span><span>Left over</span><span>Round</span></div>
+      <div id="entries"></div>
+    </div>
+    <p class="small muted" id="note" role="status" aria-live="polite">One point per card you got into the centre, minus two for every card still in your race pile.</p>
+    <button class="chip" id="record">Record round</button>
+  </section>
+
+  <section class="panel stack" id="totals" hidden>
+    <h3>Standings</h3>
+    <table><thead><tr><th>Player</th><th>Rounds</th><th>Total</th></tr></thead><tbody id="tbody"></tbody></table>
+    <div class="row">
+      <button class="chip quiet" id="undo" style="flex:1">Undo last round</button>
+      <button class="chip quiet" id="reset" style="flex:1">New game</button>
+    </div>
+  </section>
+</main>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const KEY = 'tp.sheet.v1';
+const esc = (s) => String(s).replace(/[<>&]/g, (m) => ({ '<': '&lt;', '>': '&gt;', '&': '&amp;' }[m]));
+
+let s = load();
+
+function load() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(KEY));
+    if (raw && Array.isArray(raw.players)) return raw;
+  } catch {}
+  return null;
+}
+const save = () => localStorage.setItem(KEY, JSON.stringify(s));
+
+// ---- setup -----------------------------------------------------------------
+
+let draft = ['', '', '', ''];
+
+function drawNames() {
+  $('names').innerHTML = draft.map((v, i) =>
+    `<input type="text" maxlength="16" data-i="${i}" value="${esc(v)}" placeholder="Player ${i + 1}" autocomplete="off">`
+  ).join('');
+  $('fewer').disabled = draft.length <= 2;
+  $('more').disabled = draft.length >= 8;
+}
+$('names').addEventListener('input', (e) => { draft[+e.target.dataset.i] = e.target.value; });
+$('more').addEventListener('click', () => { if (draft.length < 8) { draft.push(''); drawNames(); } });
+$('fewer').addEventListener('click', () => { if (draft.length > 2) { draft.pop(); drawNames(); } });
+
+$('begin').addEventListener('click', () => {
+  const players = draft.map((v, i) => (v.trim() || `Player ${i + 1}`));
+  const target = Math.max(10, Math.min(500, +$('target').value || 75));
+  s = { players, target, rounds: [] };
+  save();
+  paint();
+});
+
+// ---- scoring ---------------------------------------------------------------
+
+function drawEntries() {
+  $('entries').innerHTML = s.players.map((p, i) =>
+    `<div class="entry">
+       <span class="who">${esc(p)}</span>
+       <input type="number" min="0" max="40" inputmode="numeric" data-k="in" data-i="${i}" placeholder="0">
+       <input type="number" min="0" max="10" inputmode="numeric" data-k="left" data-i="${i}" placeholder="0">
+       <span class="delta" id="d${i}">0</span>
+     </div>`).join('');
+}
+
+const readRow = (i) => {
+  const inC = +document.querySelector(`[data-k=in][data-i="${i}"]`).value || 0;
+  const left = +document.querySelector(`[data-k=left][data-i="${i}"]`).value || 0;
+  return { inC, left, delta: inC - 2 * left };
+};
+
+$('entries').addEventListener('input', () => {
+  s.players.forEach((_, i) => { $('d' + i).textContent = readRow(i).delta; });
+});
+
+$('record').addEventListener('click', () => {
+  const rows = s.players.map((_, i) => readRow(i));
+  if (rows.every((r) => r.inC === 0 && r.left === 0)) {
+    $('note').textContent = 'Enter at least one number before recording the round.';
+    return;
+  }
+  s.rounds.push(rows.map((r) => r.delta));
+  save();
+  paint();
+});
+
+$('undo').addEventListener('click', () => { s.rounds.pop(); save(); paint(); });
+$('reset').addEventListener('click', () => {
+  if (!confirm('Clear this game and start a new one?')) return;
+  draft = s.players.slice();
+  s = null;
+  localStorage.removeItem(KEY);
+  paint();
+});
+
+// ---- paint -----------------------------------------------------------------
+
+function paint() {
+  const setup = !s;
+  $('setup').hidden = !setup;
+  $('board').hidden = setup;
+  $('totals').hidden = setup;
+  if (setup) return drawNames();
+
+  const totals = s.players.map((_, i) => s.rounds.reduce((a, r) => a + (r[i] ?? 0), 0));
+  const best = Math.max(...totals);
+  const won = best >= s.target;
+
+  $('roundLabel').textContent = won ? 'Game over' : `Round ${s.rounds.length + 1}`;
+  $('targetLabel').textContent = `to ${s.target}`;
+  $('record').hidden = won;
+  $('board').querySelector('#entries').hidden = won;
+  $('board').querySelector('.heads').hidden = won;
+  $('note').textContent = won
+    ? `${s.players[totals.indexOf(best)]} reached ${s.target}.`
+    : 'One point per card you got into the centre, minus two for every card still in your race pile.';
+
+  if (!won) drawEntries();
+
+  $('tbody').innerHTML = s.players.map((p, i) =>
+    `<tr class="${totals[i] === best && s.rounds.length ? 'lead' : ''}">
+       <td>${esc(p)}</td><td>${s.rounds.length}</td><td>${totals[i]}</td>
+     </tr>`).join('');
+  $('undo').disabled = s.rounds.length === 0;
+}
+
+paint();
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

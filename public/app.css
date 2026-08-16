@@ -1,0 +1,129 @@
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
+
+:root {
+  --table: #16211f;
+  --felt: #1e2c2a;
+  --rail: #273834;
+  --edge: #3a524c;
+  --chalk: #ece8dc;
+  --dim: #8fa29c;
+  --face: #f4f1e8;
+  --ink: #17201e;
+  --amber: #e8a33d;
+  --teal: #2fa08c;
+  --coral: #de5b4e;
+  --indigo: #7c74ce;
+  --alert: #f2c14e;
+  --display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
+  --body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+  --r: 5px;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--table);
+  color: var(--chalk);
+  font-family: var(--body);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+h1, h2, h3, .display {
+  font-family: var(--display);
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-transform: uppercase;
+  line-height: 1.05;
+  margin: 0 0 .5rem;
+}
+
+h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
+h2 { font-size: 1.15rem; letter-spacing: .04em; color: var(--dim); }
+h3 { font-size: 1rem; letter-spacing: .03em; }
+a { color: var(--amber); }
+
+.wrap { max-width: 640px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
+
+/* The signature: everything is an enamel chip with a hard bottom edge. */
+.chip {
+  display: block;
+  width: 100%;
+  border: 0;
+  border-radius: var(--r);
+  padding: 1rem 1.25rem;
+  font: 400 1.05rem/1.2 var(--display);
+  letter-spacing: .03em;
+  text-transform: uppercase;
+  color: var(--ink);
+  background: var(--amber);
+  box-shadow: 0 4px 0 #a9711f;
+  cursor: pointer;
+  transition: transform .06s, box-shadow .06s;
+  text-align: center;
+  text-decoration: none;
+}
+.chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #a9711f; }
+.chip:focus-visible { outline: 3px solid var(--chalk); outline-offset: 3px; }
+.chip.quiet { background: var(--rail); color: var(--chalk); box-shadow: 0 4px 0 #16211f; }
+.chip.quiet:active { box-shadow: 0 1px 0 #16211f; }
+.chip[disabled] { opacity: .45; pointer-events: none; }
+
+input[type=text], input[type=number] {
+  width: 100%;
+  background: var(--felt);
+  border: 2px solid var(--edge);
+  border-radius: var(--r);
+  color: var(--chalk);
+  font: 400 1.05rem var(--body);
+  padding: .85rem 1rem;
+}
+input:focus-visible { outline: 3px solid var(--amber); outline-offset: 1px; border-color: var(--amber); }
+label { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: .35rem; }
+
+.stack > * + * { margin-top: .75rem; }
+.panel { background: var(--felt); border: 1px solid var(--edge); border-radius: 10px; padding: 1.1rem; }
+.muted { color: var(--dim); }
+.small { font-size: .85rem; }
+.row { display: flex; gap: .6rem; align-items: center; }
+.spread { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+
+/* ---- cards ---- */
+.card {
+  --c: var(--amber);
+  position: relative;
+  background: var(--c);
+  border-radius: 4px;
+  color: #fff;
+  font: 400 1.35rem/1 var(--display);
+  display: grid;
+  place-items: center;
+  aspect-ratio: 5 / 7;
+  min-width: 34px;
+  box-shadow: 0 3px 0 rgba(0,0,0,.42);
+  user-select: none;
+}
+.card.amber  { --c: var(--amber); }
+.card.teal   { --c: var(--teal); }
+.card.coral  { --c: var(--coral); }
+.card.indigo { --c: var(--indigo); }
+.card.back { background: var(--rail); color: var(--dim); box-shadow: 0 3px 0 #101917; }
+.card.empty { background: transparent; border: 2px dashed var(--edge); box-shadow: none; color: var(--edge); }
+.card .mark { position: absolute; top: 2px; right: 4px; font-size: .6rem; opacity: .8; }
+.card.pick { outline: 3px solid var(--alert); outline-offset: 2px; }
+
+nav.crumbs { display: flex; gap: 1rem; padding: 1rem 1.25rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
+nav.crumbs a { color: var(--dim); text-decoration: none; }
+nav.crumbs a:hover, nav.crumbs a[aria-current] { color: var(--amber); }
+
+table { width: 100%; border-collapse: collapse; }
+th, td { padding: .5rem .4rem; text-align: right; border-bottom: 1px solid var(--edge); font-variant-numeric: tabular-nums; }
+th:first-child, td:first-child { text-align: left; }
+th { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); font-weight: 400; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { transition: none !important; animation: none !important; }
+}

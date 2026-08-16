@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Tenpile — a card race for up to 8</title>
+<meta name="description" content="A fast simultaneous card race for 2 to 8 players. Open the link and play.">
+<meta name="theme-color" content="#16211f">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/app.css">
+</head>
+<body>
+<nav class="crumbs">
+  <a href="/" aria-current="page">Play</a>
+  <a href="/scoresheet.html">Scoresheet</a>
+  <a href="/rules.html">How to play</a>
+</nav>
+
+<main class="wrap stack">
+  <div>
+    <h1>Tenpile</h1>
+    <p class="muted">Ten cards in your race pile. Everyone plays at once. No turns, no waiting.</p>
+  </div>
+
+  <div class="panel stack">
+    <div>
+      <label for="name">Your name</label>
+      <input id="name" type="text" maxlength="16" placeholder="Type a name" autocomplete="nickname">
+    </div>
+    <button class="chip" id="quick">Quick play</button>
+    <button class="chip quiet" id="create">Create a room</button>
+  </div>
+
+  <div class="panel stack">
+    <div>
+      <label for="code">Have a room code?</label>
+      <input id="code" type="text" maxlength="4" placeholder="ABCD" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase;letter-spacing:.4em;font-family:var(--display)">
+    </div>
+    <button class="chip quiet" id="join">Join room</button>
+    <p class="small muted" id="msg" role="status" aria-live="polite"></p>
+  </div>
+
+  <p class="small muted">Playing with real cards? The <a href="/scoresheet.html">scoresheet</a> works with no signal — keep it open at the table.</p>
+</main>
+
+<script type="module">
+const $ = (id) => document.getElementById(id);
+const msg = $('msg');
+const say = (t) => { msg.textContent = t; };
+
+$('name').value = localStorage.getItem('tp.name') || '';
+$('name').addEventListener('input', (e) => localStorage.setItem('tp.name', e.target.value.trim()));
+
+function go(code) {
+  const name = ($('name').value.trim() || 'Player').slice(0, 16);
+  localStorage.setItem('tp.name', name);
+  location.href = `/game.html#${code}`;
+}
+
+async function post(path) {
+  const r = await fetch(path, { method: 'POST' });
+  if (!r.ok) throw new Error('Server said no');
+  return r.json();
+}
+
+$('quick').addEventListener('click', async () => {
+  say('Finding a table…');
+  try { go((await post('/api/quickplay')).code); }
+  catch { say('Could not reach the server. Check your connection and try again.'); }
+});
+
+$('create').addEventListener('click', async () => {
+  say('Making a room…');
+  try { go((await post('/api/room')).code); }
+  catch { say('Could not reach the server. Check your connection and try again.'); }
+});
+
+$('join').addEventListener('click', async () => {
+  const code = $('code').value.trim().toUpperCase();
+  if (!/^[A-Z2-9]{4}$/.test(code)) return say('Room codes are 4 letters or numbers.');
+  say('Looking for that room…');
+  try {
+    const info = await (await fetch('/api/room/' + code)).json();
+    if (info.error) return say(info.error);
+    if (!info.joinable) return say('That room is full or already playing.');
+    go(code);
+  } catch { say('Could not reach the server. Check your connection and try again.'); }
+});
+
+if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});
+</script>
+</body>
+</html>

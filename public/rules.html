@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>How to play — Tenpile</title>
+<meta name="description" content="Rules and answers for Tenpile, a simultaneous card race for 2 to 8 players.">
+<meta name="theme-color" content="#16211f">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/app.css">
+<style>
+  .jump { display: flex; gap: .5rem; flex-wrap: wrap; }
+  .jump a { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; text-decoration: none;
+            background: var(--rail); color: var(--chalk); padding: .35rem .7rem; border-radius: 999px; }
+  section { scroll-margin-top: 1rem; }
+  dt { font-family: var(--display); text-transform: uppercase; letter-spacing: .02em; font-size: .92rem; margin-top: 1.2rem; }
+  dd { margin: .3rem 0 0; color: var(--dim); }
+  .demo { display: flex; gap: .3rem; align-items: center; margin: .6rem 0; }
+  .demo .card { width: 40px; }
+  ol li, ul li { margin-bottom: .4rem; }
+</style>
+</head>
+<body>
+<nav class="crumbs">
+  <a href="/">Play</a>
+  <a href="/scoresheet.html">Scoresheet</a>
+  <a href="/rules.html" aria-current="page">How to play</a>
+</nav>
+
+<main class="wrap stack">
+  <div>
+    <h1>How to play</h1>
+    <p class="muted">Two minutes to learn. Everyone plays at the same time, so there is nothing to wait for.</p>
+  </div>
+
+  <nav class="jump">
+    <a href="#quick">The short version</a>
+    <a href="#piles">Your four piles</a>
+    <a href="#rules">Full rules</a>
+    <a href="#scoring">Scoring</a>
+    <a href="#faq">Questions</a>
+  </nav>
+
+  <section id="quick" class="panel stack">
+    <h3>The short version</h3>
+    <ol>
+      <li>You start with ten cards in your <strong>race pile</strong>. Empty it and the round ends.</li>
+      <li>Cards go to the shared <strong>centre piles</strong>, which build 1 up to 10 in a single colour.</li>
+      <li>Anyone can play on any centre pile. That is where the race happens.</li>
+      <li>Every card you land in the centre is a point. Every card left in your race pile costs two.</li>
+      <li>First to 75 points wins.</li>
+    </ol>
+  </section>
+
+  <section id="piles" class="panel stack">
+    <h3>Your four piles</h3>
+    <p><strong>Race pile</strong> — ten cards, top one face up. This is the pile you are trying to empty. It is also the only pile that hurts you at the end of the round.</p>
+    <p><strong>Ready piles</strong> — three holding spots. Build them <em>downwards</em>, alternating filled and hollow marks. A 7&#9679; takes a 6&#9675;, which takes a 5&#9679;. Only your race pile and draw pile feed them.</p>
+    <div class="demo" aria-hidden="true">
+      <div class="card coral"><span class="mark">&#9679;</span>7</div>
+      <div class="card teal"><span class="mark">&#9675;</span>6</div>
+      <div class="card amber"><span class="mark">&#9679;</span>5</div>
+    </div>
+    <p><strong>Draw pile</strong> — twenty-seven cards. The button beside it turns three at a time, and only the card on top can be played. When the pile runs out the same button turns it back over and keeps going, so you never get stuck. Each pass through shows a slightly different set of cards, so keep turning if nothing plays. There is no penalty for cycling as often as you like.</p>
+    <p><strong>Centre piles</strong> — shared by everyone. Any 1 starts a new pile. After that it builds 2, 3, 4 and so on in the same colour, from any player.</p>
+  </section>
+
+  <section id="rules" class="panel stack">
+    <h3>Full rules</h3>
+    <ul>
+      <li>There are no turns. Play as fast as you can see a legal move.</li>
+      <li>You may play to the centre from your race pile, any ready pile, or the top of your turned draw cards.</li>
+      <li>You may play to a ready pile only from your race pile or your turned draw cards. Cards already on a ready pile stay put until they go to the centre.</li>
+      <li>If a ready pile empties, it refills from your race pile straight away. That is good — it moves a card out of the pile you are racing to clear.</li>
+      <li>A centre pile is finished at 10 and takes nothing more.</li>
+      <li>The instant somebody plays their last race card, the round stops. Anything you were about to play does not count.</li>
+      <li>Two people can reach for the same centre pile at once. The server decides, and it decides by which move arrived first. If yours lost, the card comes back.</li>
+    </ul>
+  </section>
+
+  <section id="scoring" class="panel stack">
+    <h3>Scoring</h3>
+    <p><strong>+1</strong> for every card of yours sitting in the centre piles.<br>
+       <strong>&minus;2</strong> for every card still in your race pile.</p>
+    <p class="muted small">A round where you cleared your race pile and placed 22 cards scores 22. A round where you placed 14 and had 4 left scores 6. Negative totals happen and they are normal.</p>
+    <p>Rounds continue until somebody reaches <strong>75</strong>. Playing with real cards? The <a href="/scoresheet.html">scoresheet</a> does this arithmetic for you and works offline.</p>
+  </section>
+
+  <section id="faq" class="stack">
+    <h3>Questions</h3>
+    <dl>
+      <dt>How many people can play?</dt>
+      <dd>Two to eight. Every player gets their own deck, and the app keeps track of whose cards are whose — so unlike the tabletop version, nobody has to sort cards back into piles between rounds.</dd>
+
+      <dt>Does everyone need an account?</dt>
+      <dd>No. Open the link, type a name, play. Nothing is stored about you beyond a random id in your own browser so you can rejoin if you drop.</dd>
+
+      <dt>What is quick play?</dt>
+      <dd>It drops you into a room that already has people waiting in it. If there is nobody waiting, it makes a fresh room and you become the person somebody else gets matched with.</dd>
+
+      <dt>How do I play with specific friends?</dt>
+      <dd>Create a room and send them the four-character code, or just send them the link. Up to seven others can join before the round starts.</dd>
+
+      <dt>Somebody's phone died mid-round. Now what?</dt>
+      <dd>Their seat is held and they can rejoin from the same phone. If they cannot come back, finish the round without them — their leftover cards score against them as normal.</dd>
+
+      <dt>Can I join a round that already started?</dt>
+      <dd>Not partway through, since you would be racing from a standing start. Wait for the round to end and you will be seated for the next one.</dd>
+
+      <dt>Nothing I have will play. What now?</dt>
+      <dd>Keep turning the draw pile. Each pass shows different cards, and the centre piles are changing constantly as everybody else plays, so a move usually opens up within a few seconds.</dd>
+
+      <dt>My card bounced back. Why?</dt>
+      <dd>Somebody beat you to that pile by a fraction of a second, or the card was not legal there. The bounce is the honest answer rather than pretending your move landed.</dd>
+
+      <dt>Does the scoresheet work without signal?</dt>
+      <dd>Yes. Open it once with a connection and it stays available afterwards, including on aeroplane mode. Your game is saved on the device, not on a server.</dd>
+
+      <dt>Is this the game I have in a box at home?</dt>
+      <dd>No — it is an independent game built on the same public domain family of speed card races. Different name, different artwork, different words. If you own a physical set, the scoresheet still works fine for it.</dd>
+    </dl>
+  </section>
+</main>
+<script>if ('serviceWorker' in navigator) navigator.serviceWorker.register('/sw.js').catch(() => {});</script>
+</body>
+</html>

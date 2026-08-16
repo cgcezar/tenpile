@@ -1,0 +1,17 @@
+{
+  "name": "Tenpile",
+  "short_name": "Tenpile",
+  "description": "A simultaneous card race for 2 to 8 players, with an offline scoresheet.",
+  "start_url": "/",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#16211f",
+  "theme_color": "#16211f",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }
+  ],
+  "shortcuts": [
+    { "name": "Scoresheet", "url": "/scoresheet.html" },
+    { "name": "How to play", "url": "/rules.html" }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "tenpile",
+  "main": "src/index.js",
+  "compatibility_date": "2026-08-01",
+
+  // Static assets are free and unmetered on both plans. The lobby, rules,
+  // FAQ and the whole offline scoresheet live here and cost nothing.
+  "assets": {
+    "directory": "./public",
+    "binding": "ASSETS",
+    "not_found_handling": "single-page-application"
+  },
+
+  "durable_objects": {
+    "bindings": [
+      { "name": "ROOM", "class_name": "Room" },
+      { "name": "MATCHMAKER", "class_name": "Matchmaker" }
+    ]
+  },
+
+  // SAFEGUARD 3 — new_sqlite_classes, not new_classes.
+  // The Workers Free plan only allows SQLite-backed Durable Objects. Using
+  // "new_classes" here creates key-value-backed objects and deployment fails.
+  "migrations": [
+    {
+      "tag": "v1",
+      "new_sqlite_classes": ["Room", "Matchmaker"]
+    }
+  ],
+
+  "observability": {
+    "enabled": true
+  }
+}
