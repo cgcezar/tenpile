@@ -5,8 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Tenpile — a card race for up to 8</title>
 <meta name="description" content="A fast simultaneous card race for 2 to 8 players. Open the link and play.">
-<meta name="theme-color" content="#16211f">
+<meta name="theme-color" content="#523A2B">
 <link rel="manifest" href="/manifest.webmanifest">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="/app.css">
 </head>
 <body>
@@ -17,30 +20,35 @@
 </nav>
 
 <main class="wrap stack">
-  <div>
-    <h1>Tenpile</h1>
-    <p class="muted">Ten cards in your race pile. Everyone plays at once. No turns, no waiting.</p>
+  <div style="text-align:center">
+    <div class="fan" aria-hidden="true"><i>3</i><i>7</i><i>1</i><i>9</i><i></i></div>
+    <div class="plate"><span></span><h1>Tenpile</h1></div>
+    <p class="muted" style="margin:.75rem 0 0">Ten cards to clear. Everyone plays at once.<br>No turns, no waiting.</p>
   </div>
 
   <div class="panel stack">
     <div>
       <label for="name">Your name</label>
-      <input id="name" type="text" maxlength="16" placeholder="Type a name" autocomplete="nickname">
+      <input id="name" type="text" maxlength="16" placeholder="Enter your name" autocomplete="nickname">
     </div>
-    <button class="chip" id="quick">Quick play</button>
-    <button class="chip quiet" id="create">Create a room</button>
+    <button class="chip" id="quick">Quick Play</button>
+    <button class="chip quiet" id="create">Create Room</button>
   </div>
 
   <div class="panel stack">
     <div>
       <label for="code">Have a room code?</label>
-      <input id="code" type="text" maxlength="4" placeholder="ABCD" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase;letter-spacing:.4em;font-family:var(--display)">
+      <input id="code" type="text" maxlength="4" placeholder="ABCD" autocapitalize="characters" spellcheck="false" style="text-transform:uppercase;letter-spacing:.45em;font-weight:600;text-align:center">
     </div>
-    <button class="chip quiet" id="join">Join room</button>
-    <p class="small muted" id="msg" role="status" aria-live="polite"></p>
+    <button class="chip quiet" id="join">Join Room</button>
+    <p class="small muted" id="msg" role="status" aria-live="polite" style="margin:0"></p>
   </div>
 
-  <p class="small muted">Playing with real cards? The <a href="/scoresheet.html">scoresheet</a> works with no signal — keep it open at the table.</p>
+  <div class="dots" style="margin-top:.25rem"><b></b><b></b><b></b><b></b></div>
+
+  <p class="small muted" style="text-align:center">
+    <a href="/rules.html">Learn the game</a> &nbsp;·&nbsp; <a href="/scoresheet.html">Offline scoresheet</a>
+  </p>
 </main>
 
 <script type="module">
