@@ -1,22 +1,30 @@
-@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap');
-
 :root {
-  --table: #16211f;
-  --felt: #1e2c2a;
-  --rail: #273834;
-  --edge: #3a524c;
-  --chalk: #ece8dc;
-  --dim: #8fa29c;
-  --face: #f4f1e8;
-  --ink: #17201e;
-  --amber: #e8a33d;
-  --teal: #2fa08c;
-  --coral: #de5b4e;
-  --indigo: #7c74ce;
-  --alert: #f2c14e;
-  --display: 'Archivo Black', 'Arial Black', 'Helvetica Neue', sans-serif;
-  --body: ui-sans-serif, system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
-  --r: 5px;
+  /* A warm table rather than a cold one. Cards need to pop off it, so the
+     surface stays dark and desaturated while the suits stay loud. */
+  --table: #523A2B;
+  --felt:  #422E22;
+  --rail:  #654835;
+  --edge:  rgba(255, 255, 255, .16);
+  --chalk: #FFF6EC;
+  --dim:   #C6AC94;
+
+  /* Four suits. Each also carries a filled/hollow glyph so the game is
+     playable without relying on colour alone. */
+  --c1: #D9453A;
+  --c2: #3B7FD4;
+  --c3: #3E9E52;
+  --c4: #F0A92E;
+  --ink1: #fff;
+  --ink2: #fff;
+  --ink3: #fff;
+  --ink4: #3A2408;
+
+  --gold: #F5A623;
+  --gold-deep: #B0740F;
+  --alert: #FFD166;
+
+  --font: 'Fredoka', ui-rounded, 'Segoe UI Variable', 'Segoe UI', system-ui, sans-serif;
+  --r: 12px;
 }
 
 * { box-sizing: border-box; }
@@ -25,105 +33,139 @@ body {
   margin: 0;
   background: var(--table);
   color: var(--chalk);
-  font-family: var(--body);
+  font-family: var(--font);
   font-size: 16px;
+  font-weight: 400;
   line-height: 1.6;
   -webkit-text-size-adjust: 100%;
   overscroll-behavior: none;
 }
 
-h1, h2, h3, .display {
-  font-family: var(--display);
-  font-weight: 400;
-  letter-spacing: -0.02em;
-  text-transform: uppercase;
-  line-height: 1.05;
-  margin: 0 0 .5rem;
-}
+h1, h2, h3 { font-weight: 700; line-height: 1.15; margin: 0 0 .5rem; }
+h1 { font-size: clamp(2.2rem, 10vw, 3.2rem); letter-spacing: .06em; }
+h2 { font-size: 1.1rem; color: var(--dim); font-weight: 600; }
+h3 { font-size: 1.15rem; }
+a { color: var(--gold); }
 
-h1 { font-size: clamp(2.4rem, 11vw, 4rem); }
-h2 { font-size: 1.15rem; letter-spacing: .04em; color: var(--dim); }
-h3 { font-size: 1rem; letter-spacing: .03em; }
-a { color: var(--amber); }
+.wrap { max-width: 620px; margin: 0 auto; padding: 1.25rem 1.25rem 4rem; }
 
-.wrap { max-width: 640px; margin: 0 auto; padding: 1.5rem 1.25rem 4rem; }
-
-/* The signature: everything is an enamel chip with a hard bottom edge. */
+/* Chunky pressed buttons: the 3D bottom edge is the whole personality. */
 .chip {
   display: block;
   width: 100%;
-  border: 0;
+  font-family: var(--font);
+  font-size: 1.125rem;
+  font-weight: 600;
+  padding: .875rem 1.25rem;
+  border: none;
   border-radius: var(--r);
-  padding: 1rem 1.25rem;
-  font: 400 1.05rem/1.2 var(--display);
-  letter-spacing: .03em;
-  text-transform: uppercase;
-  color: var(--ink);
-  background: var(--amber);
-  box-shadow: 0 4px 0 #a9711f;
+  background: var(--gold);
+  color: #2A1A0E;
+  box-shadow: 0 4px 0 var(--gold-deep), 0 6px 14px rgba(0, 0, 0, .32);
   cursor: pointer;
-  transition: transform .06s, box-shadow .06s;
   text-align: center;
   text-decoration: none;
+  transition: transform .07s ease, box-shadow .07s ease;
 }
-.chip:active { transform: translateY(3px); box-shadow: 0 1px 0 #a9711f; }
+.chip:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--gold-deep); }
 .chip:focus-visible { outline: 3px solid var(--chalk); outline-offset: 3px; }
-.chip.quiet { background: var(--rail); color: var(--chalk); box-shadow: 0 4px 0 #16211f; }
-.chip.quiet:active { box-shadow: 0 1px 0 #16211f; }
-.chip[disabled] { opacity: .45; pointer-events: none; }
+.chip.quiet {
+  background: rgba(255, 255, 255, .1);
+  color: rgba(255, 255, 255, .78);
+  border: 1.5px solid var(--edge);
+  box-shadow: none;
+}
+.chip.quiet:active { transform: translateY(2px); }
+.chip[disabled] { opacity: .4; pointer-events: none; }
 
 input[type=text], input[type=number] {
   width: 100%;
-  background: var(--felt);
+  font-family: var(--font);
+  font-size: 1rem;
+  padding: .8rem 1rem;
+  border-radius: 10px;
   border: 2px solid var(--edge);
-  border-radius: var(--r);
+  background: rgba(255, 255, 255, .1);
   color: var(--chalk);
-  font: 400 1.05rem var(--body);
-  padding: .85rem 1rem;
+  outline: none;
 }
-input:focus-visible { outline: 3px solid var(--amber); outline-offset: 1px; border-color: var(--amber); }
-label { display: block; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); margin-bottom: .35rem; }
+input::placeholder { color: rgba(255, 255, 255, .38); }
+input:focus-visible { border-color: var(--gold); }
+label { display: block; font-size: .8rem; font-weight: 600; color: var(--dim); margin-bottom: .35rem; }
 
-.stack > * + * { margin-top: .75rem; }
-.panel { background: var(--felt); border: 1px solid var(--edge); border-radius: 10px; padding: 1.1rem; }
+.stack > * + * { margin-top: .7rem; }
+.panel { background: rgba(0, 0, 0, .22); border-radius: 16px; padding: 1.1rem; }
 .muted { color: var(--dim); }
-.small { font-size: .85rem; }
+.small { font-size: .875rem; }
 .row { display: flex; gap: .6rem; align-items: center; }
 .spread { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
 
+/* A nameplate for the wordmark, so the title reads as a printed logo. */
+.plate {
+  display: inline-flex; align-items: stretch; gap: 0;
+  background: rgba(0, 0, 0, .25); border-radius: 14px; overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .3);
+}
+.plate span { width: 6px; background: var(--gold); }
+.plate h1 { margin: 0; padding: .3rem 1rem .35rem .85rem; }
+
+/* Decorative fanned deck. */
+.fan { position: relative; height: 130px; margin: .5rem auto 1rem; width: 210px; pointer-events: none; }
+.fan i {
+  position: absolute; left: 50%; bottom: 0; margin-left: -32px;
+  width: 64px; height: 90px; border-radius: 10px;
+  box-shadow: 0 5px 16px rgba(0, 0, 0, .45);
+  display: grid; place-items: center;
+  font-size: 1.5rem; font-weight: 700; font-style: normal;
+}
+.fan i::after { content: ''; position: absolute; inset: 5px; border: 1.5px solid rgba(255,255,255,.22); border-radius: 6px; }
+.fan i:nth-child(1) { background: var(--c1); color: var(--ink1); transform: rotate(-30deg) translate(-14px, 8px); }
+.fan i:nth-child(2) { background: var(--c2); color: var(--ink2); transform: rotate(-15deg) translate(-7px, 1px); }
+.fan i:nth-child(3) { background: var(--c3); color: var(--ink3); transform: rotate(0deg); }
+.fan i:nth-child(4) { background: var(--c4); color: var(--ink4); transform: rotate(15deg) translate(7px, 1px); }
+.fan i:nth-child(5) { background: var(--rail); color: var(--dim); transform: rotate(30deg) translate(14px, 8px); }
+
+.dots { display: flex; gap: 8px; justify-content: center; }
+.dots b { width: 9px; height: 9px; border-radius: 50%; }
+.dots b:nth-child(1) { background: var(--c1); }
+.dots b:nth-child(2) { background: var(--c2); }
+.dots b:nth-child(3) { background: var(--c3); }
+.dots b:nth-child(4) { background: var(--c4); }
+
 /* ---- cards ---- */
 .card {
-  --c: var(--amber);
+  --c: var(--c4); --i: var(--ink4);
   position: relative;
   background: var(--c);
-  border-radius: 4px;
-  color: #fff;
-  font: 400 1.35rem/1 var(--display);
+  color: var(--i);
+  border-radius: 10px;
+  font-size: 1.35rem;
+  font-weight: 700;
   display: grid;
   place-items: center;
   aspect-ratio: 5 / 7;
   min-width: 34px;
-  box-shadow: 0 3px 0 rgba(0,0,0,.42);
+  box-shadow: 0 3px 10px rgba(0, 0, 0, .38);
   user-select: none;
 }
-.card.amber  { --c: var(--amber); }
-.card.teal   { --c: var(--teal); }
-.card.coral  { --c: var(--coral); }
-.card.indigo { --c: var(--indigo); }
-.card.back { background: var(--rail); color: var(--dim); box-shadow: 0 3px 0 #101917; }
-.card.empty { background: transparent; border: 2px dashed var(--edge); box-shadow: none; color: var(--edge); }
-.card .mark { position: absolute; top: 2px; right: 4px; font-size: .6rem; opacity: .8; }
+.card::after { content: ''; position: absolute; inset: 4px; border: 1.5px solid rgba(255, 255, 255, .2); border-radius: 6px; pointer-events: none; }
+.card.amber  { --c: var(--c4); --i: var(--ink4); }
+.card.teal   { --c: var(--c2); --i: var(--ink2); }
+.card.coral  { --c: var(--c1); --i: var(--ink1); }
+.card.indigo { --c: var(--c3); --i: var(--ink3); }
+.card.back { background: var(--rail); color: var(--dim); }
+.card.empty { background: rgba(255, 255, 255, .06); border: 2px dashed var(--edge); box-shadow: none; color: rgba(255, 255, 255, .35); }
+.card.empty::after { display: none; }
+.card .mark { position: absolute; top: 3px; right: 5px; font-size: .6rem; opacity: .85; }
 .card.pick { outline: 3px solid var(--alert); outline-offset: 2px; }
 
-nav.crumbs { display: flex; gap: 1rem; padding: 1rem 1.25rem; font-size: .8rem; letter-spacing: .08em; text-transform: uppercase; }
-nav.crumbs a { color: var(--dim); text-decoration: none; }
-nav.crumbs a:hover, nav.crumbs a[aria-current] { color: var(--amber); }
+nav.crumbs { display: flex; gap: 1.1rem; padding: 1rem 1.25rem; font-size: .875rem; font-weight: 600; }
+nav.crumbs a { color: rgba(255, 255, 255, .6); text-decoration: none; }
+nav.crumbs a:hover, nav.crumbs a[aria-current] { color: var(--gold); }
 
 table { width: 100%; border-collapse: collapse; }
 th, td { padding: .5rem .4rem; text-align: right; border-bottom: 1px solid var(--edge); font-variant-numeric: tabular-nums; }
 th:first-child, td:first-child { text-align: left; }
-th { font-size: .72rem; letter-spacing: .08em; text-transform: uppercase; color: var(--dim); font-weight: 400; }
+th { font-size: .78rem; color: var(--dim); font-weight: 600; }
 
-@media (prefers-reduced-motion: reduce) {
-  * { transition: none !important; animation: none !important; }
-}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; animation: none !important; } }
